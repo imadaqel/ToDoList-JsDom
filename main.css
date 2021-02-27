@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, Tahoma;
+  }
+  .todo-container {
+    margin: 30px auto 0;
+    background-color: #F6F6F6;
+    width: 450px;
+  }
+  .add-task {
+    padding: 15px;
+    background-color:white;
+    position: relative;
+  }
+  .taskText{
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid rgb(161, 150, 150);
+    font-size: 14px;
+  }
+  .assigne{
+      margin-top: 20px;
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid rgb(161, 150, 150);
+    font-size: 14px;
+  }
+  .todo-container .add-task input:focus {
+    outline: none;
+  }
+  .plus {
+    position: absolute;
+    height: 40px;
+    width: 140px;
+    background-color: rgb(236, 226, 226);
+    right: 12px;
+    border-radius: 20%;
+    line-height: 43px;
+    text-align: center;
+    color: #010f0e;
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 20px;
+  }
+  /* .todo-container .add-task .plus:hover {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    transform: rotate(90deg);
+  } */
+  .todo-container .tasks-content {
+    padding: 15px;
+    background-color: white;
+    border: 1px solid rgb(161, 150, 150);
+  }
+  .todo-container .tasks-content .no-tasks-message {
+    color: #777;
+    font-size: 15px;
+  }
+  .todo-container .tasks-content > span {
+    display: block;
+    background-color: #FFF;
+    padding: 10px;
+    border: 1px solid rgb(161, 150, 150);
+  }
+  .todo-container .tasks-content > span:not(:last-child) {
+    margin-bottom: 10px;
+  }
+  .delete {
+    float: right;
+    background-color: black;
+    padding: 4px 10px;
+    color: #FFF;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .todo-container .tasks-content .task-box.finished {
+    text-decoration: line-through;
+  }
+  .task-stats {
+    overflow: hidden;
+    margin: 20px auto;
+    width: 400px;
+    font-size: 12px;
+  }
+  .tasks-count {
+    font-size: 15px;
+    float: left;
+    padding: 10px;
+  }
+  .tasks-completed {
+    font-size: 15px;
+    float: right;
+    padding: 10px;
+    text-align: right;
+  }
+  .todo ,
+  .done{
+    color: black;
+    padding: 1px 5px;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  

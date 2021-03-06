@@ -44,6 +44,12 @@
     font-size: 20px;
     margin-top: 20px;
   }
+  .search-button{
+    cursor: pointer;
+    border-radius: 20%;
+    background-color: rgb(236, 226, 226);
+
+  }
   /* .todo-container .add-task .plus:hover {
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
@@ -77,6 +83,20 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .finish {
+    float: right;
+    background-color: black;
+    padding: 4px 10px;
+    color: #FFF;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+
+
   .todo-container .tasks-content .task-box.finished {
     text-decoration: line-through;
   }

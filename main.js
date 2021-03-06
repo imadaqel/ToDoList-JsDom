@@ -1,83 +1,143 @@
-let theInput = document.querySelector(".inputText");
-let theAssassigneInput = document.querySelector(".assigne");
-let theAddButton = document.querySelector(".add-task .plus");
+let Input = document.querySelector(".inputText");
+let AssassigneInput = document.querySelector(".assigne");
+let search = document.querySelector(".search");
+let AddButton = document.querySelector(".add-task .plus");
+let SearchButton = document.querySelector(".search-button");
 let tasksContainer = document.querySelector(".tasks-content");
 let noTaskMsg = document.querySelector(".no-tasks-message");
 let tasksCount = document.querySelector(".tasks-count span");
 let tasksCompleted = document.querySelector(".tasks-completed span");
 
 window.onload = function () {
-    theInput.focus();
+    Input.focus();
+    getFromLocalStorage()
 };
 
-theAddButton.onclick = function () {
-    if (theInput.value === '') {
+AddButton.onclick = function () {
+    if (Input.value === '') {
         alert("No Value");
     } else {
         noTaskMsg.remove();
-        let mainSpan = document.createElement("span");
         let interSpan1 = document.createElement("div");
         let interSpan2 = document.createElement("div");
+        let taskText = document.createTextNode(Input.value);
+        let taskAssig = document.createTextNode(AssassigneInput.value);
 
+        let list = JSON.parse(localStorage.getItem('list'));
+        if (!list) {
+            list = [];
+        }
+        list.push({ 'task': taskText.data, 'assignee': taskAssig.data, 'finish': false });
+        localStorage.setItem('list', JSON.stringify(list));
+        tasksContainer.innerHTML = '';
+        render(list);
+        Input.value = '';
+        AssassigneInput.value = '';
+        Input.focus();
+        calculateTasks(list);
+    }
+}
+
+function render(array) {
+    tasksContainer.innerHTML = '';
+    array.forEach(elem => {
+        let mainSpan = document.createElement("span");
         let deleteElement = document.createElement("span");
-        let text = document.createTextNode(theInput.value);
-        let text2 = document.createTextNode(theAssassigneInput.value);
-
         let deleteText = document.createTextNode("delete");
-
-        interSpan1.appendChild(text);
-        interSpan2.appendChild(text2);
-
-        interSpan1.className = 'task-box';
-        mainSpan.innerHTML += interSpan1.outerHTML + interSpan2.outerHTML;
-
-
         deleteElement.appendChild(deleteText)
         deleteElement.className = 'delete';
+        let finishElement = document.createElement("span");
+        let finishText = document.createTextNode("finish");
+        finishElement.appendChild(finishText)
+        finishElement.className = 'finish';
 
+        let everytask = {
+            task: elem.task,
+            assignee: elem.assignee,
+            status: elem.finish
+        };
+        mainSpan.innerHTML = `
+      <div>
+      <h4 className="header">${everytask.task}</h4>
+      <p id="toggle">${everytask.assignee}</p>
+      <h5 id='status'>${everytask.status}</h5>
+     </div>
+     `;
         mainSpan.appendChild(deleteElement);
+        mainSpan.appendChild(finishElement);
+        mainSpan.className = 'task-box';
         tasksContainer.appendChild(mainSpan);
+    });
+}
 
-        localStorage["list"] = tasksContainer.innerHTML
-
-        theInput.value = '';
-        theAssassigneInput.value = '';
-        theInput.focus();
-
-        calculateTasks();
-
+function getFromLocalStorage() {
+    let list = JSON.parse(localStorage.getItem('list'));
+    if (!list) {
+        return;
     }
+    console.log(list)
+    noTaskMsg.remove();
+    render(list);
+    calculateTasks(list);
 }
 
 document.addEventListener('click', function (event) {
+    if (event.target.className == 'finish') {
+        statusId = event.target.parentNode.firstElementChild.firstElementChild.innerHTML;
+        let list = JSON.parse(localStorage.getItem('list'));
+        if (!list) {
+            list = [];
+        }
+        for (var i in list) {
+            if (list[i].task == statusId) {
+                list[i].finish = !list[i].finish;
+                break;
+            }
+        }
+        localStorage.setItem('list', JSON.stringify(list));
+        tasksContainer.innerHTML = '';
+        render(list);
+        getFromLocalStorage()
+    }
     if (event.target.className == 'delete') {
-
-        event.target.parentNode.remove()
+        deleteId = event.target.parentNode.firstElementChild.firstElementChild.innerHTML;
+        console.log(deleteId)
+        let list = JSON.parse(localStorage.getItem('list'));
+        if (!list) {
+            list = [];
+        }
+        const deletelist = list.filter(e => !e.task.includes(deleteId));
+        localStorage.setItem('list', JSON.stringify(deletelist));
+        tasksContainer.innerHTML = '';
+        getFromLocalStorage()
     }
 
-    if (event.target.classList.contains('task-box')) {
-
-        event.target.classList.toggle('finished')
-    }
-    localStorage["list"] = tasksContainer.innerHTML
     calculateTasks()
 })
 
+function calculateTasks(list) {
 
-
-
-function calculateTasks() {
-
-    localStorage["count"] = document.querySelectorAll('.task-box').length;
-    // console.log(localStorage["count"])
+    var finishlist = list.filter(e => e.finish);
+    tasksCompleted.innerHTML = finishlist.length;
+    console.log(localStorage["finishedCount"]);
+    localStorage["count"] = list.length;
     tasksCount.innerHTML = localStorage["count"];
-    localStorage["finishedCount"] = document.querySelectorAll('.finished').length;
-    tasksCompleted.innerHTML = localStorage["finishedCount"];
+}
+SearchButton.onclick = function () {
+    if (search.value === '') {
+        return;
+    }
+    let list = JSON.parse(localStorage.getItem('list'));
+    if (!list) {
+        return;
+    }
+    let filtterdList = _.find(list, function (item) {
+        return item.task.indexOf(search.value) !== -1 || item.assignee.indexOf(search.value) !== -1;
+    });
+    var arrayfiltterdList = [];
+    arrayfiltterdList.push(filtterdList);
+    console.log(arrayfiltterdList);
+    tasksContainer.innerHTML = '';
+    render(arrayfiltterdList);
 }
 
-if (localStorage["list"]) {
-    tasksContainer.innerHTML = localStorage["list"];
-    tasksCount.innerHTML = localStorage["count"];
-    tasksCompleted.innerHTML = localStorage["finishedCount"];
-
-}
